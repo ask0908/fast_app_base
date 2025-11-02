@@ -32,7 +32,7 @@ dependencies:
     sdk: flutter
 
   #splash creator
-  flutter_native_splash: ^2.3.0
+  flutter_native_splash: ^2.4.7
 
   #dart
   meta: ^1.4.0
@@ -110,6 +110,7 @@ flutter:
     - assets/image/
     - assets/image/icon/
     - assets/image/flag/
+    - assets/image/splash/
     - assets/image/darkmode/
     - assets/translations/
     - assets/
