@@ -1,4 +1,5 @@
 import 'package:fast_app_base/common/common.dart';
+import 'package:fast_app_base/screen/notification/s_notification.dart';
 import 'package:flutter/material.dart';
 
 class TtosAppBar extends StatefulWidget {
@@ -34,9 +35,8 @@ class _TtosAppBarState extends State<TtosAppBar> {
           width10,
           Tap(
             onTap: () {
-              setState(() {
-                _showRedDot = !_showRedDot;
-              });
+              // 알림 화면
+              Nav.push(NotificationScreen());
             },
             child: Stack(
               children: [
