@@ -58,8 +58,8 @@ class MainScreenState extends State<MainScreen> with SingleTickerProviderStateMi
         drawer: const MenuDrawer(),
         body: Container(
           // color: context.appColors.seedColor.getMaterialColorValues[200],
-          color: Theme.of(context).scaffoldBackgroundColor, // 테마에 설정된 색 사용
-          // color: Colors.black,
+          // color: Theme.of(context).scaffoldBackgroundColor, // 테마에 설정된 색 사용
+          color: Colors.black,
           padding: EdgeInsets.only(
             bottom: extendBody ? 60 - bottomNavigationBarBorderRadius : 0,
           ),
