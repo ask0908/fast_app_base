@@ -1,4 +1,4 @@
-package com.new.package.name
+package com.fastcampus.flutter.ttos
 
 import io.flutter.embedding.android.FlutterActivity
 

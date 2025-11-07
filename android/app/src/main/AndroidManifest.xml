@@ -1,5 +1,5 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.new.package.name">
+    package="com.fastcampus.flutter.ttos">
 
     <application
         android:name="${applicationName}"
