@@ -20,7 +20,7 @@ class StockItem extends StatelessWidget {
             width: 50,
           ),
           width20,
-          (stock.stockName).text.size(18).color(Colors.white).bold.make(),
+          (stock.name).text.size(18).color(Colors.white).bold.make(),
           emptyExpanded,
           Column(
             crossAxisAlignment: CrossAxisAlignment.end,
