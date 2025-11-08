@@ -5,20 +5,32 @@ import 'package:flutter_animate/flutter_animate.dart';
 
 class AnimatedAppBar extends StatefulWidget {
   final String title;
-  final ScrollController controller;
-  
-  const AnimatedAppBar(this.title, {super.key, required this.controller});
+  final ScrollController scrollController;
+  final AnimationController animationController;
+
+  const AnimatedAppBar(
+    this.title, {
+    super.key,
+    required this.scrollController,
+    required this.animationController,
+  });
 
   @override
   State<AnimatedAppBar> createState() => _AnimatedAppBarState();
 }
 
 class _AnimatedAppBarState extends State<AnimatedAppBar> {
+  late CurvedAnimation animation = CurvedAnimation(
+      parent: widget.animationController,
+      curve: Curves.bounceInOut
+  );
 
   // 필요할 때 게터가 값을 가져옴
   Duration get duration => 10.ms;
   double scrollPosition = 0;
+
   bool get isTriggered => scrollPosition > 80;
+
   bool get isNotTriggered => !isTriggered;
 
   // initial : 가장 상단에 있을 때 목표하는 타겟점
@@ -37,14 +49,20 @@ class _AnimatedAppBarState extends State<AnimatedAppBar> {
 
   @override
   void initState() {
-    widget.controller.addListener(() {
+    widget.animationController.addListener(() {
+      // 리스너 추가하고 빈 setState 넣어야 build()가 애니메이션 티커가 작동할 때마다 수행되면서
+      // animation * value 값이 같이 바뀌어 left가 변함
+      setState(() {});
+    });
+
+    widget.scrollController.addListener(() {
       setState(() {
-        scrollPosition = widget.controller.position.pixels;
+        scrollPosition = widget.scrollController.position.pixels;
       });
     });
     super.initState();
   }
-  
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -61,27 +79,24 @@ class _AnimatedAppBarState extends State<AnimatedAppBar> {
                 direction: AxisDirection.left,
               ),
             ).p20(),
-            Positioned.fill(
-              child: Align(
-                alignment: Alignment.topRight,
-                child: TweenAnimationBuilder<Color?>(
+            Positioned(
+              left: animation.value * 200,
+              child: TweenAnimationBuilder<Color?>(
                   duration: 1000.ms,
                   tween: ColorTween(
-                    begin: Colors.green,
-                    end: isTriggered ? Colors.orange : Colors.green
-                  ),
+                      begin: Colors.green,
+                      end: isTriggered ? Colors.orange : Colors.green),
                   builder: (context, value, child) => ColorFiltered(
-                    colorFilter: ColorFilter.mode(
-                      value ?? Colors.green, BlendMode.modulate,
-                    ),
-                    child: child,
-                  ),
+                        colorFilter: ColorFilter.mode(
+                          value ?? Colors.green,
+                          BlendMode.modulate,
+                        ),
+                        child: child,
+                      ),
                   child: Image.asset(
-                  "$basePath/icon/map_point.png",
-                  height: 60,
-                )
-                ),
-              ),
+                    "$basePath/icon/map_point.png",
+                    height: 60,
+                  )),
             ),
             AnimatedContainer(
               duration: duration,
@@ -89,7 +104,8 @@ class _AnimatedAppBarState extends State<AnimatedAppBar> {
                 left: getValue(20, 50),
                 top: getValue(50, 15),
               ),
-              child: AnimatedDefaultTextStyle( // 움직이는 텍스트 표현 시 사용
+              child: AnimatedDefaultTextStyle(
+                // 움직이는 텍스트 표현 시 사용
                 duration: duration,
                 style: TextStyle(
                   fontSize: isNotTriggered ? 30 : 18,
