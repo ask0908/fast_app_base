@@ -61,6 +61,28 @@ class _AnimatedAppBarState extends State<AnimatedAppBar> {
                 direction: AxisDirection.left,
               ),
             ).p20(),
+            Positioned.fill(
+              child: Align(
+                alignment: Alignment.topRight,
+                child: TweenAnimationBuilder<Color?>(
+                  duration: 1000.ms,
+                  tween: ColorTween(
+                    begin: Colors.green,
+                    end: isTriggered ? Colors.orange : Colors.green
+                  ),
+                  builder: (context, value, child) => ColorFiltered(
+                    colorFilter: ColorFilter.mode(
+                      value ?? Colors.green, BlendMode.modulate,
+                    ),
+                    child: child,
+                  ),
+                  child: Image.asset(
+                  "$basePath/icon/map_point.png",
+                  height: 60,
+                )
+                ),
+              ),
+            ),
             AnimatedContainer(
               duration: duration,
               padding: EdgeInsets.only(
