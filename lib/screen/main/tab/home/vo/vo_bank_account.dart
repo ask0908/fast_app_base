@@ -10,4 +10,9 @@ class BankAccount {
     this.balance, {
     this.accountTypeName,
   });
+
+  @override
+  String toString() {
+    return "name : $accountTypeName, bank : ${bank.name}, balance : $balance";
+  }
 }
