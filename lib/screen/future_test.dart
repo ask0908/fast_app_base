@@ -39,19 +39,19 @@ main() async {
 
 abstract class DoWorkInterface {
   // DoWorkInterface를 상속, 구현한 클래스가 이 함수 구현 시 동기로 짜든 비동기로 짜든 상관없음
-  FutureOr<String> doWork();
+  FutureOr doWork();
 }
 
 class SyncWork extends DoWorkInterface {
   @override
-  String doWork() {
+  void doWork() {
     //
   }
 }
 
 class AsyncWork extends DoWorkInterface {
   @override
-  Future<String> doWork() async {
+  FutureOr doWork() async {
     //
   }
 }

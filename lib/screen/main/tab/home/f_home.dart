@@ -1,4 +1,3 @@
-import 'package:fast_app_base/common/cli_common.dart';
 import 'package:fast_app_base/common/common.dart';
 import 'package:fast_app_base/common/widget/w_big_button.dart';
 import 'package:fast_app_base/common/widget/w_rounded_container.dart';
@@ -28,6 +27,8 @@ class _HomeFragmentState extends State<HomeFragment> {
   // 실제론 상태관리 라이브러리, 별도 클래스 안에 있을 값
   bool isLike = false;
 
+  late final stream = countStream(5).asBroadcastStream();
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -46,6 +47,38 @@ class _HomeFragmentState extends State<HomeFragment> {
               ),
               child: Column(
                 children: [
+                  StreamBuilder(
+                    stream: stream,
+                    builder: (context, snapshot) {
+                      final count = snapshot.data;
+                      final status = snapshot.connectionState;
+                      switch (status) {
+                        case ConnectionState.none:
+                        case ConnectionState.waiting:
+                          return CircularProgressIndicator();
+                        case ConnectionState.active:
+                          return count!.text.size(30).color(Colors.white).bold.make();
+                        case ConnectionState.done:
+                          return "완료".text.size(30).color(Colors.white).bold.make();
+                      }
+                    },
+                  ),
+                  StreamBuilder(
+                    stream: stream,
+                    builder: (context, snapshot) {
+                      final count = snapshot.data;
+                      final status = snapshot.connectionState;
+                      switch (status) {
+                        case ConnectionState.none:
+                        case ConnectionState.waiting:
+                          return CircularProgressIndicator();
+                        case ConnectionState.active:
+                          return count!.text.size(30).color(Colors.white).bold.make();
+                        case ConnectionState.done:
+                          return "완료".text.size(30).color(Colors.white).bold.make();
+                      }
+                    },
+                  ),
                   BigButton(
                     "토스뱅크",
                     onTap: () async {
@@ -78,6 +111,15 @@ class _HomeFragmentState extends State<HomeFragment> {
         ],
       ),
     );
+  }
+
+  Stream<int> countStream(int max) async* {
+    // 빌드 타임에 바로 스트림이 실행돼 로딩을 볼 수 없으니 일부러 2초 딜레이
+    await sleepAsync(2.seconds);
+    for (int i = 1; i <= max; i++) {
+      yield i;
+      await sleepAsync(1.seconds);
+    }
   }
 
   void showSnackbar(BuildContext context) {
