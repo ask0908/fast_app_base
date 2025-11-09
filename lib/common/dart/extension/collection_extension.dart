@@ -5,5 +5,12 @@ extension ListExtension<T> on List<T> {
     this[origin] = temp1;
   }
 
-  Stream<T> toStream() => Stream.fromIterable(this);
+  // Stream<T> toStream() => Stream.fromIterable(this);
+
+  // 위와 같은 역할
+  Stream<T> toStream() async* {
+    for (T item in this) {
+      yield item;
+    }
+  }
 }

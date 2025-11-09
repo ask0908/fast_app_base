@@ -1,23 +1,20 @@
-import 'dart:collection';
-
-import 'package:fast_app_base/common/dart/collection/collection_ext.dart';
 import 'package:fast_app_base/screen/main/tab/home/banks_dummy.dart';
 import 'package:fast_app_base/screen/main/tab/home/vo/vo_bank_account.dart';
 
-final bankAccountShinhan = BankAccount(bankShinhan, 30000000, accountTypeName: "신한 주거래 우대통장(저축예금)");
-final bankAccountShinhan2 = BankAccount(bankShinhan, 300000000, accountTypeName: "저축예금");
-final bankAccountShinhan3 = BankAccount(bankShinhan, 300000000, accountTypeName: "저축예금");
-final bankAccountShinhan4 = BankAccount(bankShinhan, 300000000, accountTypeName: "저축예금");
-final bankAccountShinhan5 = BankAccount(bankShinhan, 300000000, accountTypeName: "저축예금");
-final bankAccountShinhan6 = BankAccount(bankShinhan, 300000000, accountTypeName: "저축예금");
-final bankAccountShinhan7 = BankAccount(bankShinhan, 300000000, accountTypeName: "저축예금");
-final bankAccountShinhan8 = BankAccount(bankShinhan, 300000000, accountTypeName: "저축예금");
-final bankAccountShinhan9 = BankAccount(bankShinhan, 300000000, accountTypeName: "저축예금");
-final bankAccountShinhan10 = BankAccount(bankShinhan, 300000000, accountTypeName: "저축예금");
-final bankAccountShinhan11 = BankAccount(bankShinhan, 300000000, accountTypeName: "저축예금");
-final bankAccountKakao = BankAccount(bankKakao, 300000000);
-final bankAccountKakao2 = BankAccount(bankKakao, 300000000, accountTypeName: "특별통장");
-final bankAccountTtoss = BankAccount(bankTtos, 3000000000, accountTypeName: "입출금통장");
+final bankAccountShinhan = BankAccount(1, bankShinhan, 30000000, accountTypeName: "신한 주거래 우대통장(저축예금)");
+final bankAccountShinhan2 = BankAccount(2, bankShinhan, 300000000, accountTypeName: "저축예금");
+final bankAccountShinhan3 = BankAccount(3, bankShinhan, 300000000, accountTypeName: "저축예금");
+final bankAccountShinhan4 = BankAccount(4, bankShinhan, 300000000, accountTypeName: "저축예금");
+final bankAccountShinhan5 = BankAccount(5, bankShinhan, 300000000, accountTypeName: "저축예금");
+final bankAccountShinhan6 = BankAccount(6, bankShinhan, 300000000, accountTypeName: "저축예금");
+final bankAccountShinhan7 = BankAccount(7, bankShinhan, 300000000, accountTypeName: "저축예금");
+final bankAccountShinhan8 = BankAccount(8, bankShinhan, 300000000, accountTypeName: "저축예금");
+final bankAccountShinhan9 = BankAccount(9, bankShinhan, 300000000, accountTypeName: "저축예금");
+final bankAccountShinhan10 = BankAccount(10, bankShinhan, 300000000, accountTypeName: "저축예금");
+final bankAccountShinhan11 = BankAccount(11, bankShinhan, 300000000, accountTypeName: "저축예금");
+final bankAccountKakao = BankAccount(12, bankKakao, 300000000);
+final bankAccountKakao2 = BankAccount(13, bankKakao, 300000000, accountTypeName: "특별통장");
+final bankAccountTtoss = BankAccount(14, bankTtos, 3000000000, accountTypeName: "입출금통장");
 
 final List<BankAccount> bankAccounts = [
   bankAccountShinhan,
