@@ -5,13 +5,11 @@ import 'package:fast_app_base/common/widget/w_rounded_container.dart';
 import 'package:fast_app_base/screen/dialog/d_message.dart';
 import 'package:fast_app_base/screen/main/s_main.dart';
 import 'package:fast_app_base/screen/main/tab/home/bank_accounts_dummy.dart';
+import 'package:fast_app_base/screen/main/tab/home/s_number.dart';
 import 'package:fast_app_base/screen/main/tab/home/w_bank_account.dart';
-import 'package:fast_app_base/screen/main/tab/home/w_rive_like_button.dart';
 import 'package:fast_app_base/screen/main/tab/home/w_ttos_app_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
-import 'package:live_background/live_background.dart';
-import 'package:live_background/widget/live_background_widget.dart';
 
 import '../../../dialog/d_color_bottom.dart';
 import '../../../dialog/d_confirm.dart';
@@ -36,16 +34,6 @@ class _HomeFragmentState extends State<HomeFragment> {
       color: Colors.black,
       child: Stack(
         children: [
-          const LiveBackgroundWidget(
-            palette: Palette(
-              colors: [
-                Colors.red,
-                Colors.green,
-              ]
-            ),
-            velocityX: 1,
-            particleMaxSize: 20,
-          ),
           RefreshIndicator(
             edgeOffset: TtosAppBar.appBarHeight,
             onRefresh: () async {
@@ -53,26 +41,20 @@ class _HomeFragmentState extends State<HomeFragment> {
             },
             child: SingleChildScrollView(
               padding: const EdgeInsets.only(
-                top: TtosAppBar.appBarHeight,
+                top: TtosAppBar.appBarHeight + 10,
                 bottom: MainScreenState.bottomNavigationBarHeight,
               ),
               child: Column(
                 children: [
-                  SizedBox(
-                    height: 250,
-                    width: 250,
-                    child: RiveLikeButton(
-                      isLike,
-                      onTapLike: (bool isLike) {
-                        setState(() {
-                          this.isLike = isLike;
-                        });
-                      },
-                    ),
+                  BigButton(
+                    "토스뱅크",
+                    onTap: () async {
+                      print("start");
+                      final result = await Nav.push(NumberScreen());
+                      print("result : $result");
+                      print("end");
+                    },
                   ),
-                  BigButton("토스뱅크", onTap: () {
-                    context.showSnackbar("토스뱅크 클릭");
-                  }),
                   height10,
                   RoundedContainer(
                     child: Column(
