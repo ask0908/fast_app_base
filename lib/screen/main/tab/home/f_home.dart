@@ -1,3 +1,6 @@
+import 'dart:convert';
+import 'dart:isolate';
+
 import 'package:fast_app_base/common/common.dart';
 import 'package:fast_app_base/common/widget/w_big_button.dart';
 import 'package:fast_app_base/common/widget/w_rounded_container.dart';
@@ -170,5 +173,85 @@ class _HomeFragmentState extends State<HomeFragment> {
 
   void openDrawer(BuildContext context) {
     Scaffold.of(context).openDrawer();
+  }
+
+  void heavyComputationWork() {
+    int count = 0;
+    for (int i = 0; i < 9000000000; i++) {
+      count++;
+    }
+
+    print(count);
+  }
+
+  Future<void> heavyComputationWorkWithIsolateSpawn() async {
+    final errorPort = ReceivePort();
+    errorPort.listen((element) {
+      debugPrint("Isolate error");
+      debugPrint(element);
+    });
+
+    final exitPort = ReceivePort();
+    exitPort.listen((message) {
+      debugPrint("exit - done");
+    });
+
+    final progressListenPort = ReceivePort();
+    progressListenPort.listen((message) {
+      debugPrint("received from isolate");
+      debugPrint(message.toString());
+    });
+
+    // run은 에러 처리 매개변수가 없어서 try-catch로 감싸야 함
+    // 진행률도 못 받아서 프로그레스 표시 불가 -> 진행률 표시할 필요 없는 무거운 작업에 사용
+    try {
+      final isolateResult = await Isolate.run<String>(() {
+        const message = '{"message": "Hello, world!"}';
+        final jsonObject = json.decode(message);
+        debugPrint(jsonObject["message"]);
+        int count = 0;
+        debugPrint("Isolate count start");
+
+        final startTime = DateTime.now();
+        for (int i = 0; i < 1500000000; i++) {
+          count += 1;
+        }
+
+        debugPrint(count.toString());
+        debugPrint("${DateTime.now().difference(startTime).inMilliseconds / 1000}초");
+        return "Run Isolate done";
+      });
+
+      debugPrint(isolateResult);
+    } catch (e) {
+      print(e);
+    }
+
+    final isolate = await Isolate.spawn((port) {
+      int count = 0;
+      debugPrint("Isolate count start");
+      final startTime = DateTime.now();
+      for (int i = 0; i < 1500000000; i++) {
+        count += 1;
+
+        // if (i % 1500000000 == 0) {
+        //   port.send(count);
+        //   debugPrint("${DateTime.now().difference(startTime).inMilliseconds / 1000}초");
+        // }
+      }
+
+      debugPrint(count.toString());
+      debugPrint("${DateTime.now().difference(startTime).inMilliseconds / 1000}초");
+    },
+      progressListenPort.sendPort, // sendPort == spawn()의 port
+      onError: errorPort.sendPort,
+      onExit: exitPort.sendPort,
+    );
+
+    debugPrint("spawn done");
+    delay(() {
+      debugPrint("force kill");
+      isolate.kill(priority: Isolate.immediate);
+    }, 1000.ms);
   }
 }
