@@ -1,17 +1,11 @@
 import 'package:fast_app_base/common/common.dart';
-import 'package:fast_app_base/screen/main/tab/all/f_all.dart';
-import 'package:fast_app_base/screen/main/tab/benefit/f_benefit.dart';
-import 'package:fast_app_base/screen/main/tab/home/f_home.dart';
-import 'package:fast_app_base/screen/main/tab/stock/f_stock.dart';
-import 'package:fast_app_base/screen/main/tab/ttospay/f_ttospay.dart';
+import 'package:fast_app_base/screen/main/tab/search/f_search.dart';
+import 'package:fast_app_base/screen/main/tab/todo/f_todo.dart';
 import 'package:flutter/material.dart';
 
 enum TabItem {
-  home(Icons.home, '홈', HomeFragment()),
-  benefit(Icons.star, '혜택', BenefitFragment()),
-  ttospay(Icons.payment, '또스페이', TtosPayFragment()),
-  stock(Icons.candlestick_chart, '주식', StockFragment()),
-  all(Icons.star, '전체', AllFragment());
+  todo(Icons.event_note_outlined, 'Todo', TodoFragment()),
+  search(Icons.search, 'Search', SearchFragment());
 
   final IconData activeIcon;
   final IconData inActiveIcon;
@@ -27,7 +21,7 @@ enum TabItem {
           key: ValueKey(tabName),
           isActivated ? activeIcon : inActiveIcon,
           color:
-              isActivated ? context.appColors.iconButton : context.appColors.iconButtonInactivate,
+          isActivated ? context.appColors.iconButton : context.appColors.iconButtonInactivate,
         ),
         label: tabName);
   }

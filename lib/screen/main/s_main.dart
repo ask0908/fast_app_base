@@ -15,14 +15,8 @@ class MainScreen extends StatefulWidget {
 }
 
 class MainScreenState extends State<MainScreen> with SingleTickerProviderStateMixin, AfterLayoutMixin {
-  TabItem _currentTab = TabItem.home;
-  final tabs = [
-    TabItem.home,
-    TabItem.benefit,
-    TabItem.ttospay,
-    TabItem.stock,
-    TabItem.all,
-  ];
+  TabItem _currentTab = TabItem.todo;
+  final tabs = [TabItem.todo, TabItem.search];
   final List<GlobalKey<NavigatorState>> navigatorKeys = [];
 
   int get _currentIndex => tabs.indexOf(_currentTab);
@@ -32,8 +26,6 @@ class MainScreenState extends State<MainScreen> with SingleTickerProviderStateMi
   bool get extendBody => true;
 
   static double get bottomNavigationBarBorderRadius => 30.0;
-
-  static const double bottomNavigationBarHeight = 50;
 
   @override
   FutureOr<void> afterFirstLayout(BuildContext context) {
@@ -57,12 +49,8 @@ class MainScreenState extends State<MainScreen> with SingleTickerProviderStateMi
         extendBody: extendBody, //bottomNavigationBar 아래 영역 까지 그림
         drawer: const MenuDrawer(),
         body: Container(
-          // color: context.appColors.seedColor.getMaterialColorValues[200],
-          // color: Theme.of(context).scaffoldBackgroundColor, // 테마에 설정된 색 사용
-          color: Colors.black,
-          padding: EdgeInsets.only(
-            bottom: extendBody ? 60 - bottomNavigationBarBorderRadius : 0,
-          ),
+          color: context.appColors.seedColor.getMaterialColorValues[200],
+          padding: EdgeInsets.only(bottom: extendBody ? 60 - bottomNavigationBarBorderRadius : 0),
           child: SafeArea(
             bottom: !extendBody,
             child: pages,
@@ -74,18 +62,18 @@ class MainScreenState extends State<MainScreen> with SingleTickerProviderStateMi
   }
 
   bool get isRootPage =>
-      _currentTab == TabItem.home && _currentTabNavigationKey.currentState?.canPop() == false;
+      _currentTab == TabItem.todo && _currentTabNavigationKey.currentState?.canPop() == false;
 
   IndexedStack get pages => IndexedStack(
       index: _currentIndex,
       children: tabs
           .mapIndexed((tab, index) => Offstage(
-                offstage: _currentTab != tab,
-                child: TabNavigator(
-                  navigatorKey: navigatorKeys[index],
-                  tabItem: tab,
-                ),
-              ))
+        offstage: _currentTab != tab,
+        child: TabNavigator(
+          navigatorKey: navigatorKeys[index],
+          tabItem: tab,
+        ),
+      ))
           .toList());
 
   void _handleBackPressed(bool didPop) {
@@ -95,8 +83,8 @@ class MainScreenState extends State<MainScreen> with SingleTickerProviderStateMi
         return;
       }
 
-      if (_currentTab != TabItem.home) {
-        _changeTab(tabs.indexOf(TabItem.home));
+      if (_currentTab != TabItem.todo) {
+        _changeTab(tabs.indexOf(TabItem.todo));
       }
     }
   }
@@ -131,10 +119,10 @@ class MainScreenState extends State<MainScreen> with SingleTickerProviderStateMi
     return tabs
         .mapIndexed(
           (tab, index) => tab.toNavigationBarItem(
-            context,
-            isActivated: _currentIndex == index,
-          ),
-        )
+        context,
+        isActivated: _currentIndex == index,
+      ),
+    )
         .toList();
   }
 
