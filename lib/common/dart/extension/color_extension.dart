@@ -5,6 +5,7 @@ import 'package:fast_app_base/common/dart/extension/context_extension.dart';
 import 'package:flutter/material.dart';
 
 extension ColorExtension on Color {
+  // 특정 색의 lightness 밝기 조절
   Color getSwatchByBrightness(int swatchValue) {
     final Brightness brightness = App.navigatorKey.currentContext!.themeType.themeData.brightness;
     if (brightness == Brightness.light) {

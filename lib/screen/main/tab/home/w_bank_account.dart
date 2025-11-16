@@ -34,13 +34,13 @@ class BankAccountWidget extends StatelessWidget {
           ),
         ),
         RoundedContainer(
-          backgroundColor: context.appColors.buttonBackGround,
+          color: context.appColors.buttonBackGround,
           child: "송금".text.white.bold.make(),
           padding: const EdgeInsets.symmetric(
             horizontal: 20,
             vertical: 10,
           ),
-          radius: 10,
+          radiusValue: 10,
         ),
       ],
     );

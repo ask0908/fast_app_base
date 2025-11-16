@@ -1,6 +1,11 @@
 import 'package:after_layout/after_layout.dart';
+import 'package:eva_icons_flutter/eva_icons_flutter.dart';
+import 'package:fast_app_base/common/dart/extension/datetime_extension.dart';
+import 'package:fast_app_base/data/memory/todo_data_holder.dart';
+import 'package:fast_app_base/data/memory/vo_todo.dart';
 import 'package:fast_app_base/screen/main/tab/tab_item.dart';
 import 'package:fast_app_base/screen/main/tab/tab_navigator.dart';
+import 'package:fast_app_base/screen/main/write/d_write_todo.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
 
@@ -57,6 +62,12 @@ class MainScreenState extends State<MainScreen> with SingleTickerProviderStateMi
           ),
         ),
         bottomNavigationBar: _buildBottomNavigationBar(context),
+        floatingActionButton: FloatingActionButton(
+          onPressed: () async {
+            context.holder.addTodo();
+          },
+          child: Icon(EvaIcons.plus),
+        ),
       ),
     );
   }

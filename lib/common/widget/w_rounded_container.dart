@@ -3,9 +3,11 @@ import 'package:flutter/material.dart';
 
 class RoundedContainer extends StatelessWidget {
   final Widget child;
+  final EdgeInsets? margin;
   final EdgeInsets padding;
-  final double radius;
-  final Color? backgroundColor;
+  final double radiusValue;
+  final Color? color;
+  final BorderRadiusGeometry? radius;
 
   const RoundedContainer({
     required this.child,
@@ -13,18 +15,21 @@ class RoundedContainer extends StatelessWidget {
       horizontal: 20,
       vertical: 15,
     ),
-    this.radius = 20,
-    this.backgroundColor,
+    this.margin,
+    this.radius,
+    this.radiusValue = 20,
+    this.color,
     super.key,
   });
 
   @override
   Widget build(BuildContext context) {
     return Container(
+      margin: margin,
       padding: padding,
       decoration: BoxDecoration(
-        color: backgroundColor ?? context.appColors.roundedLayoutBackground,
-        borderRadius: BorderRadius.circular(radius),
+        color: color ?? context.appColors.roundedLayoutBackground,
+        borderRadius: radius ?? BorderRadius.circular(radiusValue),
       ),
       child: child,
     );
