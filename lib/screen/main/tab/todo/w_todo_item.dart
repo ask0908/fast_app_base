@@ -6,7 +6,7 @@ import 'package:fast_app_base/data/memory/vo_todo.dart';
 import 'package:fast_app_base/screen/main/tab/todo/w_todo_status.dart';
 import 'package:flutter/material.dart';
 
-class TodoItem extends StatelessWidget with TodoDataProvider {
+class TodoItem extends StatelessWidget {
 
   final Todo todo;
 
@@ -17,7 +17,7 @@ class TodoItem extends StatelessWidget with TodoDataProvider {
     // 스와이프로 지울 때 Dismissible 사용, key를 넘겨야 하는데 ValueKey 쓰면 편함
     return Dismissible(
       onDismissed: (direction) {
-        todoData.remove(todo);
+        context.readTodoCubit.remove(todo);
       },
       background: RoundedContainer(
         color: context.appColors.removeTodoBg,
@@ -61,7 +61,7 @@ class TodoItem extends StatelessWidget with TodoDataProvider {
                 ),
                 IconButton(
                   onPressed: () async {
-                    todoData.editTodo(todo);
+                    context.readTodoCubit.editTodo(todo);
                   },
                   icon: const Icon(
                     EvaIcons.editOutline,

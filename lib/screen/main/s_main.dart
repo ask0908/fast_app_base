@@ -3,6 +3,7 @@ import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:fast_app_base/screen/main/tab/tab_item.dart';
 import 'package:fast_app_base/screen/main/tab/tab_navigator.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
 
 import '../../common/common.dart';
@@ -15,7 +16,7 @@ class MainScreen extends StatefulWidget {
   State<MainScreen> createState() => MainScreenState();
 }
 
-class MainScreenState extends State<MainScreen> with SingleTickerProviderStateMixin, AfterLayoutMixin, TodoDataProvider {
+class MainScreenState extends State<MainScreen> with SingleTickerProviderStateMixin, AfterLayoutMixin {
   TabItem _currentTab = TabItem.todo;
   final tabs = [TabItem.todo, TabItem.search];
   final List<GlobalKey<NavigatorState>> navigatorKeys = [];
@@ -60,7 +61,10 @@ class MainScreenState extends State<MainScreen> with SingleTickerProviderStateMi
         bottomNavigationBar: _buildBottomNavigationBar(context),
         floatingActionButton: FloatingActionButton(
           onPressed: () async {
-            todoData.addTodo();
+            // read : bloc 패키지 함수, Get.find()와 같은 역할
+            // final todoData = context.read<TodoCubit>();
+            // context_extension의 TodoCubit 타입 게터 사용
+            context.readTodoCubit.addTodo();
           },
           child: Icon(EvaIcons.plus),
         ),

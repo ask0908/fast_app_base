@@ -26,7 +26,7 @@ export 'widget/w_tap.dart';
 export 'theme/color/abs_theme_colors.dart';
 export 'theme/shadows/abs_theme_shadows.dart';
 export 'widget/constant_widget.dart';
-export 'package:fast_app_base/data/memory/todo_data_holder.dart';
+export 'package:fast_app_base/data/memory/todo_cubit.dart';
 
 const defaultFontStyle = GoogleFonts.ptSerif;
 
