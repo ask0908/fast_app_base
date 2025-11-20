@@ -5,19 +5,20 @@ import 'package:fast_app_base/common/widget/w_rounded_container.dart';
 import 'package:fast_app_base/data/memory/vo_todo.dart';
 import 'package:fast_app_base/screen/main/tab/todo/w_todo_status.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class TodoItem extends StatelessWidget with TodoDataProvider {
+class TodoItem extends ConsumerWidget {
 
   final Todo todo;
 
-  TodoItem(this.todo, {super.key});
+  const TodoItem(this.todo, {super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     // 스와이프로 지울 때 Dismissible 사용, key를 넘겨야 하는데 ValueKey 쓰면 편함
     return Dismissible(
       onDismissed: (direction) {
-        todoData.remove(todo);
+        ref.readTodoHolder.remove(todo);
       },
       background: RoundedContainer(
         color: context.appColors.removeTodoBg,
@@ -61,7 +62,7 @@ class TodoItem extends StatelessWidget with TodoDataProvider {
                 ),
                 IconButton(
                   onPressed: () async {
-                    todoData.editTodo(todo);
+                    ref.readTodoHolder.editTodo(todo);
                   },
                   icon: const Icon(
                     EvaIcons.editOutline,
