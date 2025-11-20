@@ -1,5 +1,6 @@
 import 'package:fast_app_base/data/memory/bloc/bloc_status.dart';
 import 'package:fast_app_base/data/memory/bloc/todo_bloc_state.dart';
+import 'package:fast_app_base/data/memory/bloc/todo_event.dart';
 import 'package:fast_app_base/data/memory/todo_status.dart';
 import 'package:fast_app_base/data/memory/vo_todo.dart';
 import 'package:fast_app_base/screen/dialog/d_confirm.dart';
@@ -7,15 +8,19 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../screen/main/write/d_write_todo.dart';
 
-// dart run build_runner build 명령어 실행 시 Cubit 제네릭 타입에 XXXBlocState 안 쓰면 빌드 실패
-// 처음부터 써놓고 하기
-class TodoCubit extends Cubit<TodoBlocState> {
+// Bloc 제네릭 타입 = event, state
+class TodoBloc extends Bloc<TodoEvent, TodoBlocState> {
 
   // app.dart의 BlocProvider에서 create로 TodoCubit을 생성해서 넘겨야 하는데
   // 생성자 파라미터가 필요없게 내부에서 초기화하게 수정
-  TodoCubit() : super(const TodoBlocState(BlocStatus.initial, <Todo>[]));
+  TodoBloc() : super(const TodoBlocState(BlocStatus.initial, <Todo>[])) {
+    on<TodoAddEvent>(_addTodo);
+    on<TodoStatusUpdateEvent>(_changeTodoStatus);
+    on<TodoContentUpdateEvent>(_editTodo);
+    on<TodoRemoveEvent>(_remove);
+  }
 
-  void addTodo() async {
+  void _addTodo(TodoAddEvent event, Emitter<TodoBlocState> emit) async {
     // api 통신, 시간 걸리는 작업 중 메인 화면이 사라지거나 컨텍스트가 유효하지 않게 될 수 있음
     // mounted 여부 확인 추가했지만 여기선 다이얼로그가 뜨고 사라졌을 때 state가 mounted된 게
     // 흐름상 보장되기 때문에 제거
@@ -37,12 +42,13 @@ class TodoCubit extends Cubit<TodoBlocState> {
       );
 
       // cubit 내재 함수. 새 state를 보내야 해서 state.copyWith 사용
-      emitNewList(copiedOldTodoList);
+      emitNewList(copiedOldTodoList, emit);
     }
   }
 
-  void changeTodoStatus(Todo todo) async {
+  void _changeTodoStatus(TodoStatusUpdateEvent event, Emitter<TodoBlocState> emit) async {
     final copiedOldTodoList = List.of(state.todoList);
+    final todo = event.updatedTodo;
     final todoIndex = copiedOldTodoList.indexWhere((e) => e.id == todo.id);
     TodoStatus status = todo.status;
 
@@ -60,10 +66,11 @@ class TodoCubit extends Cubit<TodoBlocState> {
 
     copiedOldTodoList[todoIndex] = todo.copyWith(status: status);
 
-    emitNewList(copiedOldTodoList);
+    emitNewList(copiedOldTodoList, emit);
   }
 
-  void editTodo(Todo todo) async {
+  void _editTodo(TodoContentUpdateEvent event, Emitter<TodoBlocState> emit) async {
+    final todo = event.updatedTodo;
     final result = await WriteTodoDialog(todoForEdit: todo).show();
     if (result != null) {
       // 넘어온 투두 객체 위치 파악해서 해당 pos에 설정
@@ -74,17 +81,20 @@ class TodoCubit extends Cubit<TodoBlocState> {
         modifyTime: DateTime.now(),
       );
 
-      emitNewList(copiedOldTodoList);
+      emitNewList(copiedOldTodoList, emit);
     }
   }
 
-  void remove(Todo todo) {
+  void _remove(TodoRemoveEvent event, Emitter<TodoBlocState> emit) {
+    final todo = event.removedTodo;
     final copiedOldTodoList = List<Todo>.from(state.todoList);
     copiedOldTodoList.removeWhere((e) => e.id == todo.id);
-    emitNewList(copiedOldTodoList);
+    emitNewList(copiedOldTodoList, emit);
   }
 
-  void emitNewList(List<Todo> copiedOldTodoList) {
+  // cubit이 아닌 bloc에선 emit()을 직접 쓰면 안되고 테스트 시에만 써야 함
+  // 실제 사용 시에는 Emitter 사용
+  void emitNewList(List<Todo> copiedOldTodoList, Emitter<TodoBlocState> emit) {
     emit(state.copyWith(todoList: copiedOldTodoList));
   }
 }

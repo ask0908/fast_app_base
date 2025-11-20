@@ -1,5 +1,6 @@
 import 'package:after_layout/after_layout.dart';
 import 'package:eva_icons_flutter/eva_icons_flutter.dart';
+import 'package:fast_app_base/data/memory/bloc/todo_event.dart';
 import 'package:fast_app_base/screen/main/tab/tab_item.dart';
 import 'package:fast_app_base/screen/main/tab/tab_navigator.dart';
 import 'package:flutter/material.dart';
@@ -61,10 +62,8 @@ class MainScreenState extends State<MainScreen> with SingleTickerProviderStateMi
         bottomNavigationBar: _buildBottomNavigationBar(context),
         floatingActionButton: FloatingActionButton(
           onPressed: () async {
-            // read : bloc 패키지 함수, Get.find()와 같은 역할
-            // final todoData = context.read<TodoCubit>();
-            // context_extension의 TodoCubit 타입 게터 사용
-            context.readTodoCubit.addTodo();
+            // cubit 대신 bloc를 쓰게 바꾼 후에는 이벤트를 넘긴다
+            context.readTodoBloc.add(TodoAddEvent());
           },
           child: Icon(EvaIcons.plus),
         ),

@@ -2,6 +2,7 @@ import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:fast_app_base/common/common.dart';
 import 'package:fast_app_base/common/dart/extension/datetime_extension.dart';
 import 'package:fast_app_base/common/widget/w_rounded_container.dart';
+import 'package:fast_app_base/data/memory/bloc/todo_event.dart';
 import 'package:fast_app_base/data/memory/vo_todo.dart';
 import 'package:fast_app_base/screen/main/tab/todo/w_todo_status.dart';
 import 'package:flutter/material.dart';
@@ -17,7 +18,7 @@ class TodoItem extends StatelessWidget {
     // 스와이프로 지울 때 Dismissible 사용, key를 넘겨야 하는데 ValueKey 쓰면 편함
     return Dismissible(
       onDismissed: (direction) {
-        context.readTodoCubit.remove(todo);
+        context.readTodoBloc.add(TodoRemoveEvent(todo));
       },
       background: RoundedContainer(
         color: context.appColors.removeTodoBg,
@@ -61,7 +62,7 @@ class TodoItem extends StatelessWidget {
                 ),
                 IconButton(
                   onPressed: () async {
-                    context.readTodoCubit.editTodo(todo);
+                    context.readTodoBloc.add(TodoContentUpdateEvent(todo));
                   },
                   icon: const Icon(
                     EvaIcons.editOutline,

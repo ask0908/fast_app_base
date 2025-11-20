@@ -28,7 +28,7 @@ class AppState extends State<App> with Nav, WidgetsBindingObserver {
   @override
   void initState() {
     super.initState();
-    Get.put(TodoCubit());
+    Get.put(TodoBloc());
     WidgetsBinding.instance.addObserver(this);
   }
 
@@ -44,7 +44,7 @@ class AppState extends State<App> with Nav, WidgetsBindingObserver {
       child: Builder(builder: (context) {
         // MaterialApp을 BlocProvider로 감싸면 MaterialApp 안에선 context로 TodoCubit에 접근 가능해짐
         return BlocProvider(
-          create: (BuildContext context) => TodoCubit(),
+          create: (BuildContext context) => TodoBloc(),
           child: MaterialApp(
             navigatorKey: App.navigatorKey,
             localizationsDelegates: context.localizationDelegates,
