@@ -1,30 +1,12 @@
-import 'package:fast_app_base/data/memory/todo_data_notifier.dart';
 import 'package:fast_app_base/data/memory/todo_status.dart';
 import 'package:fast_app_base/data/memory/vo_todo.dart';
 import 'package:fast_app_base/screen/dialog/d_confirm.dart';
-import 'package:flutter/cupertino.dart';
+import 'package:get/get.dart';
 
 import '../../screen/main/write/d_write_todo.dart';
 
-class TodoDataHolder extends InheritedWidget {
-  final TodoDataNotifier notifier;
-
-  const TodoDataHolder({
-    super.key,
-    required super.child,
-    required this.notifier,
-  });
-
-  @override
-  bool updateShouldNotify(covariant InheritedWidget oldWidget) {
-    return true;
-  }
-
-  // 같은 위젯 트리의 어떤 위젯에서도 TodoDataHolder 찾아서 돌려줌
-  static TodoDataHolder _of(BuildContext context) {
-    TodoDataHolder inherited = (context.dependOnInheritedWidgetOfExactType<TodoDataHolder>())!;
-    return inherited;
-  }
+class TodoDataHolder extends GetxController {
+  final RxList<Todo> todoList = <Todo>[].obs;
 
   void changeTodoStatus(Todo todo) async {
     switch (todo.status) {
@@ -39,7 +21,11 @@ class TodoDataHolder extends InheritedWidget {
         });
     }
 
-    notifier.notify();
+    // rx 변수를 관찰하는 obx 위젯 내부적으로 재빌드
+    todoList.refresh();
+    // w_todo_list에서 GetBuilder 사용하려면 추가
+    // refresh() 호출하고 갱신하려면 호출, GetxController 업데이트
+    update();
   }
 
   void addTodo() async {
@@ -48,13 +34,15 @@ class TodoDataHolder extends InheritedWidget {
     // 흐름상 보장되기 때문에 제거
     final result = await WriteTodoDialog().show();
     if (result != null) {
-      notifier.addTodo(
+      todoList.add(
           Todo(
             id: DateTime.now().millisecondsSinceEpoch,
             title: result.text,
             dueDate: result.dateTime,
           )
       );
+
+      update();
     }
   }
 
@@ -63,16 +51,18 @@ class TodoDataHolder extends InheritedWidget {
     if (result != null) {
       todo.title = result.text;
       todo.dueDate = result.dateTime;
-      notifier.notify();
+      todoList.refresh();
+      update();
     }
   }
 
   void remove(Todo todo) {
-    notifier.value.remove(todo);
-    notifier.notify();
+    todoList.remove(todo);
+    todoList.refresh();
+    update();
   }
 }
 
-extension TodoDataHolderContextExtension on BuildContext {
-  TodoDataHolder get holder => TodoDataHolder._of(this);
+mixin class TodoDataProvider {
+  late final TodoDataHolder todoData = Get.find();
 }
