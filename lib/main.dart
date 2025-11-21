@@ -1,6 +1,6 @@
 import 'package:easy_localization/easy_localization.dart';
+import 'package:fast_app_base/common/data/preference/item/app_shared_preference.dart';
 import 'package:fast_app_base/data/memory/app_bloc/app_bloc_observer.dart';
-import 'package:fast_app_base/data/memory/app_bloc/app_event_transformer.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
@@ -14,7 +14,10 @@ void main() async {
   FlutterNativeSplash.preserve(widgetsBinding: bindings);
   await EasyLocalization.ensureInitialized();
   await AppPreferences.init();
+  await AppSharedPreference.init();
   timeago.setLocaleMessages('ko', timeago.KoMessages());
+
+  // AppSharedPreference.setCount(1);
 
   // static observer 객체에 커스텀 옵저버 넣으면 앱에서 발생하는 모든 이벤트의 변화 관찰 가능
   Bloc.observer = AppBlocObserver();
