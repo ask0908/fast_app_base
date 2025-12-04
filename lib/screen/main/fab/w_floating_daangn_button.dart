@@ -7,6 +7,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class FloatingDaangnButton extends ConsumerWidget {
+
+  static const height = 140.0;
+
   // 성능이 중요한 많이 쓰이는 위젯에선 생성자에 const 빼지 말기
   FloatingDaangnButton({super.key});
 
@@ -72,7 +75,21 @@ class FloatingDaangnButton extends ConsumerWidget {
                   ),
                   Tap(
                     onTap: () {
-                      ref.read(floatingButtonStateProvider.notifier).onTapButton();
+                      // 여기서 현재 탭에 따른 처리 가능
+                      // final currentTab = ref.read(currentTabProvider);
+                      // switch (currentTab) {
+                      //   case TabItem.home:
+                      //     throw UnimplementedError();
+                      //   case TabItem.localLife:
+                      //     throw UnimplementedError();
+                      //   case TabItem.nearMe:
+                      //     throw UnimplementedError();
+                      //   case TabItem.chat:
+                      //     throw UnimplementedError();
+                      //   case TabItem.my:
+                      //     throw UnimplementedError();
+                      // }
+                      ref.read(floatingButtonStateProvider.notifier).toggleMenu();
                     },
                     child: AnimatedContainer(
                       duration: duration,
@@ -100,13 +117,13 @@ class FloatingDaangnButton extends ConsumerWidget {
                           )
                         ],
                       ),
-                    ).pOnly(
-                        // viewPaddingBottom 게터는 강사가 만듬
-                        bottom: MainScreenState.bottomNavigationBarHeight +
-                            context.viewPaddingBottom +
-                            10,
-                        right: 20),
-                  ),
+                    ),
+                  ).pOnly(
+                    // viewPaddingBottom 게터는 강사가 만듬
+                      bottom: MainScreenState.bottomNavigationBarHeight +
+                          context.viewPaddingBottom +
+                          10,
+                      right: 20),
                 ],
               ),
             ),

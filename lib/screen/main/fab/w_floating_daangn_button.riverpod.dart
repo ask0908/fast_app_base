@@ -22,7 +22,7 @@ class FloatingButtonStateNotifier extends StateNotifier<FloatingButtonState> {
 
   bool needToMakeButtonBigger = false;
 
-  void onTapButton() {
+  void toggleMenu() {
     // 둘 다 바뀌기 때문에 copyWith 안 씀
     // state = state.copyWith(isExpanded: !state.isExpanded, isSmall: true);
     final isExpanded = state.isExpanded;

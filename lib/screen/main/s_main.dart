@@ -1,3 +1,4 @@
+import 'package:fast_app_base/common/cli_common.dart';
 import 'package:fast_app_base/screen/main/fab/w_floating_daangn_button.dart';
 import 'package:fast_app_base/screen/main/tab/tab_item.dart';
 import 'package:fast_app_base/screen/main/tab/tab_navigator.dart';
@@ -7,19 +8,22 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../common/common.dart';
 import 'w_menu_drawer.dart';
 
-class MainScreen extends StatefulWidget {
+final currentTabProvider = StateProvider<TabItem>((ref) => TabItem.home);
+
+class MainScreen extends ConsumerStatefulWidget {
   const MainScreen({super.key});
 
   @override
-  State<MainScreen> createState() => MainScreenState();
+  ConsumerState<MainScreen> createState() => MainScreenState();
 }
 
-class MainScreenState extends State<MainScreen> with SingleTickerProviderStateMixin {
-  TabItem _currentTab = TabItem.home;
+class MainScreenState extends ConsumerState<MainScreen> with SingleTickerProviderStateMixin {
   final tabs = TabItem.values;
   late final List<GlobalKey<NavigatorState>> navigatorKeys =
   TabItem.values.map((e) => GlobalKey<NavigatorState>()).toList();
 
+  // watch()는 필요한 곳에서만 쓰기
+  TabItem get _currentTab => ref.watch(currentTabProvider);
   int get _currentIndex => tabs.indexOf(_currentTab);
 
   GlobalKey<NavigatorState> get _currentTabNavigationKey =>
@@ -37,31 +41,39 @@ class MainScreenState extends State<MainScreen> with SingleTickerProviderStateMi
 
   @override
   Widget build(BuildContext context) {
-    return ProviderScope(
-      child: PopScope(
-        canPop: isRootPage,
-        onPopInvoked: _handleBackPressed,
-        // Stack 안에 새 위젯 넣을 때 Material로 안 감싸면 문제 발생할 수 있음
-        child: Material(
-          child: Stack(
-            children: [
-              Scaffold(
-                extendBody: extendBody, //bottomNavigationBar 아래 영역 까지 그림
-                drawer: const MenuDrawer(),
-                body: Container(
-                  color: context.appColors.seedColor.getMaterialColorValues[200],
-                  padding: EdgeInsets.only(
-                      bottom: extendBody ? 60 - bottomNavigationBarBorderRadius : 0),
-                  child: SafeArea(
-                    bottom: !extendBody,
-                    child: pages,
-                  ),
+    return PopScope(
+      canPop: isRootPage,
+      onPopInvoked: _handleBackPressed,
+      // Stack 안에 새 위젯 넣을 때 Material로 안 감싸면 문제 발생할 수 있음
+      child: Material(
+        child: Stack(
+          children: [
+            Scaffold(
+              extendBody: extendBody, //bottomNavigationBar 아래 영역 까지 그림
+              drawer: const MenuDrawer(),
+              body: Container(
+                padding: EdgeInsets.only(
+                    bottom: extendBody ? 60 - bottomNavigationBarBorderRadius : 0),
+                child: SafeArea(
+                  bottom: !extendBody,
+                  child: pages,
                 ),
-                bottomNavigationBar: _buildBottomNavigationBar(context),
               ),
-              FloatingDaangnButton(),
-            ],
-          ),
+            ),
+            AnimatedOpacity(
+              opacity: _currentTab != TabItem.chat ? 1 : 0,
+              duration: 300.ms,
+              child: FloatingDaangnButton(),
+            ),
+            // bottomNavigationBar를 Stack의 마지막에 배치해서 맨 위로 올림
+            // fab 밑의 탭이 클릭되지 않는 현상 수정 위함
+            Positioned(
+              left: 0,
+              right: 0,
+              bottom: 0,
+              child: _buildBottomNavigationBar(context),
+            ),
+          ],
         ),
       ),
     );
@@ -137,9 +149,7 @@ class MainScreenState extends State<MainScreen> with SingleTickerProviderStateMi
   }
 
   void _changeTab(int index) {
-    setState(() {
-      _currentTab = tabs[index];
-    });
+    ref.read(currentTabProvider.notifier).state = tabs[index];
   }
 
   BottomNavigationBarItem bottomItem(bool activate, IconData iconData,
