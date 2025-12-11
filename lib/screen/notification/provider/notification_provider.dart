@@ -1,4 +1,4 @@
-import 'package:fast_app_base/common/data/network/daangn_api.dart';
+import 'package:fast_app_base/data/network/daangn_api.dart';
 import 'package:fast_app_base/screen/notification/vo/vo_notification.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 

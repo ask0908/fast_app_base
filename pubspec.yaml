@@ -81,6 +81,7 @@ dependencies:
   flutter_riverpod: ^2.6.1
   flutter_hooks: ^0.21.3+1
   hooks_riverpod: ^2.6.1
+  smooth_page_indicator: ^2.0.1
 
 dev_dependencies:
   flutter_test:

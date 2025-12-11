@@ -3,7 +3,7 @@
 // ignore_for_file: type=lint
 // ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target, unnecessary_question_mark
 
-part of 'vo_post.dart';
+part of 'vo_simple_post.dart';
 
 // **************************************************************************
 // FreezedGenerator
@@ -15,30 +15,32 @@ final _privateConstructorUsedError = UnsupportedError(
     'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models');
 
 /// @nodoc
-mixin _$ProductPost {
+mixin _$SimpleProductPost {
+  int get id => throw _privateConstructorUsedError;
   User get user => throw _privateConstructorUsedError;
   Product get product => throw _privateConstructorUsedError;
-  String get content => throw _privateConstructorUsedError;
+  String get title => throw _privateConstructorUsedError;
   Address get address => throw _privateConstructorUsedError;
   int get chatCount => throw _privateConstructorUsedError;
   int get likeCount => throw _privateConstructorUsedError;
   DateTime get createdTime => throw _privateConstructorUsedError;
 
   @JsonKey(ignore: true)
-  $ProductPostCopyWith<ProductPost> get copyWith =>
+  $SimpleProductPostCopyWith<SimpleProductPost> get copyWith =>
       throw _privateConstructorUsedError;
 }
 
 /// @nodoc
-abstract class $ProductPostCopyWith<$Res> {
-  factory $ProductPostCopyWith(
-          ProductPost value, $Res Function(ProductPost) then) =
-      _$ProductPostCopyWithImpl<$Res, ProductPost>;
+abstract class $SimpleProductPostCopyWith<$Res> {
+  factory $SimpleProductPostCopyWith(
+          SimpleProductPost value, $Res Function(SimpleProductPost) then) =
+      _$SimpleProductPostCopyWithImpl<$Res, SimpleProductPost>;
   @useResult
   $Res call(
-      {User user,
+      {int id,
+      User user,
       Product product,
-      String content,
+      String title,
       Address address,
       int chatCount,
       int likeCount,
@@ -50,9 +52,9 @@ abstract class $ProductPostCopyWith<$Res> {
 }
 
 /// @nodoc
-class _$ProductPostCopyWithImpl<$Res, $Val extends ProductPost>
-    implements $ProductPostCopyWith<$Res> {
-  _$ProductPostCopyWithImpl(this._value, this._then);
+class _$SimpleProductPostCopyWithImpl<$Res, $Val extends SimpleProductPost>
+    implements $SimpleProductPostCopyWith<$Res> {
+  _$SimpleProductPostCopyWithImpl(this._value, this._then);
 
   // ignore: unused_field
   final $Val _value;
@@ -62,15 +64,20 @@ class _$ProductPostCopyWithImpl<$Res, $Val extends ProductPost>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
+    Object? id = null,
     Object? user = null,
     Object? product = null,
-    Object? content = null,
+    Object? title = null,
     Object? address = null,
     Object? chatCount = null,
     Object? likeCount = null,
     Object? createdTime = null,
   }) {
     return _then(_value.copyWith(
+      id: null == id
+          ? _value.id
+          : id // ignore: cast_nullable_to_non_nullable
+              as int,
       user: null == user
           ? _value.user
           : user // ignore: cast_nullable_to_non_nullable
@@ -79,9 +86,9 @@ class _$ProductPostCopyWithImpl<$Res, $Val extends ProductPost>
           ? _value.product
           : product // ignore: cast_nullable_to_non_nullable
               as Product,
-      content: null == content
-          ? _value.content
-          : content // ignore: cast_nullable_to_non_nullable
+      title: null == title
+          ? _value.title
+          : title // ignore: cast_nullable_to_non_nullable
               as String,
       address: null == address
           ? _value.address
@@ -128,17 +135,18 @@ class _$ProductPostCopyWithImpl<$Res, $Val extends ProductPost>
 }
 
 /// @nodoc
-abstract class _$$ProductPostImplCopyWith<$Res>
-    implements $ProductPostCopyWith<$Res> {
-  factory _$$ProductPostImplCopyWith(
-          _$ProductPostImpl value, $Res Function(_$ProductPostImpl) then) =
-      __$$ProductPostImplCopyWithImpl<$Res>;
+abstract class _$$SimpleProductPostImplCopyWith<$Res>
+    implements $SimpleProductPostCopyWith<$Res> {
+  factory _$$SimpleProductPostImplCopyWith(_$SimpleProductPostImpl value,
+          $Res Function(_$SimpleProductPostImpl) then) =
+      __$$SimpleProductPostImplCopyWithImpl<$Res>;
   @override
   @useResult
   $Res call(
-      {User user,
+      {int id,
+      User user,
       Product product,
-      String content,
+      String title,
       Address address,
       int chatCount,
       int likeCount,
@@ -153,25 +161,30 @@ abstract class _$$ProductPostImplCopyWith<$Res>
 }
 
 /// @nodoc
-class __$$ProductPostImplCopyWithImpl<$Res>
-    extends _$ProductPostCopyWithImpl<$Res, _$ProductPostImpl>
-    implements _$$ProductPostImplCopyWith<$Res> {
-  __$$ProductPostImplCopyWithImpl(
-      _$ProductPostImpl _value, $Res Function(_$ProductPostImpl) _then)
+class __$$SimpleProductPostImplCopyWithImpl<$Res>
+    extends _$SimpleProductPostCopyWithImpl<$Res, _$SimpleProductPostImpl>
+    implements _$$SimpleProductPostImplCopyWith<$Res> {
+  __$$SimpleProductPostImplCopyWithImpl(_$SimpleProductPostImpl _value,
+      $Res Function(_$SimpleProductPostImpl) _then)
       : super(_value, _then);
 
   @pragma('vm:prefer-inline')
   @override
   $Res call({
+    Object? id = null,
     Object? user = null,
     Object? product = null,
-    Object? content = null,
+    Object? title = null,
     Object? address = null,
     Object? chatCount = null,
     Object? likeCount = null,
     Object? createdTime = null,
   }) {
-    return _then(_$ProductPostImpl(
+    return _then(_$SimpleProductPostImpl(
+      null == id
+          ? _value.id
+          : id // ignore: cast_nullable_to_non_nullable
+              as int,
       null == user
           ? _value.user
           : user // ignore: cast_nullable_to_non_nullable
@@ -180,9 +193,9 @@ class __$$ProductPostImplCopyWithImpl<$Res>
           ? _value.product
           : product // ignore: cast_nullable_to_non_nullable
               as Product,
-      null == content
-          ? _value.content
-          : content // ignore: cast_nullable_to_non_nullable
+      null == title
+          ? _value.title
+          : title // ignore: cast_nullable_to_non_nullable
               as String,
       null == address
           ? _value.address
@@ -206,16 +219,18 @@ class __$$ProductPostImplCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$ProductPostImpl implements _ProductPost {
-  const _$ProductPostImpl(this.user, this.product, this.content, this.address,
-      this.chatCount, this.likeCount, this.createdTime);
+class _$SimpleProductPostImpl implements _SimpleProductPost {
+  const _$SimpleProductPostImpl(this.id, this.user, this.product, this.title,
+      this.address, this.chatCount, this.likeCount, this.createdTime);
 
+  @override
+  final int id;
   @override
   final User user;
   @override
   final Product product;
   @override
-  final String content;
+  final String title;
   @override
   final Address address;
   @override
@@ -227,17 +242,18 @@ class _$ProductPostImpl implements _ProductPost {
 
   @override
   String toString() {
-    return 'ProductPost(user: $user, product: $product, content: $content, address: $address, chatCount: $chatCount, likeCount: $likeCount, createdTime: $createdTime)';
+    return 'SimpleProductPost(id: $id, user: $user, product: $product, title: $title, address: $address, chatCount: $chatCount, likeCount: $likeCount, createdTime: $createdTime)';
   }
 
   @override
   bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$ProductPostImpl &&
+            other is _$SimpleProductPostImpl &&
+            (identical(other.id, id) || other.id == id) &&
             (identical(other.user, user) || other.user == user) &&
             (identical(other.product, product) || other.product == product) &&
-            (identical(other.content, content) || other.content == content) &&
+            (identical(other.title, title) || other.title == title) &&
             (identical(other.address, address) || other.address == address) &&
             (identical(other.chatCount, chatCount) ||
                 other.chatCount == chatCount) &&
@@ -248,32 +264,36 @@ class _$ProductPostImpl implements _ProductPost {
   }
 
   @override
-  int get hashCode => Object.hash(runtimeType, user, product, content, address,
-      chatCount, likeCount, createdTime);
+  int get hashCode => Object.hash(runtimeType, id, user, product, title,
+      address, chatCount, likeCount, createdTime);
 
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
-  _$$ProductPostImplCopyWith<_$ProductPostImpl> get copyWith =>
-      __$$ProductPostImplCopyWithImpl<_$ProductPostImpl>(this, _$identity);
+  _$$SimpleProductPostImplCopyWith<_$SimpleProductPostImpl> get copyWith =>
+      __$$SimpleProductPostImplCopyWithImpl<_$SimpleProductPostImpl>(
+          this, _$identity);
 }
 
-abstract class _ProductPost implements ProductPost {
-  const factory _ProductPost(
+abstract class _SimpleProductPost implements SimpleProductPost {
+  const factory _SimpleProductPost(
+      final int id,
       final User user,
       final Product product,
-      final String content,
+      final String title,
       final Address address,
       final int chatCount,
       final int likeCount,
-      final DateTime createdTime) = _$ProductPostImpl;
+      final DateTime createdTime) = _$SimpleProductPostImpl;
 
+  @override
+  int get id;
   @override
   User get user;
   @override
   Product get product;
   @override
-  String get content;
+  String get title;
   @override
   Address get address;
   @override
@@ -284,6 +304,6 @@ abstract class _ProductPost implements ProductPost {
   DateTime get createdTime;
   @override
   @JsonKey(ignore: true)
-  _$$ProductPostImplCopyWith<_$ProductPostImpl> get copyWith =>
+  _$$SimpleProductPostImplCopyWith<_$SimpleProductPostImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }
