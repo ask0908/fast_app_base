@@ -16,12 +16,12 @@ final notification2 = DaangnNotification(
 );
 
 get notification3 => DaangnNotification(
-  NotificationType.official,
-  "지금 새로워진 \"당근\"을 만나보세요",
-  "새 이름 새 로고를 소개할게요",
-  DateTime.now().subtract(4.days),
-  isRead: true,
-);
+      NotificationType.official,
+      "지금 새로워진 \"당근\"을 만나보세요",
+      "새 이름 새 로고를 소개할게요",
+      DateTime.now().subtract(4.days),
+      isRead: true,
+    );
 
 final notification4 = DaangnNotification(
   NotificationType.local,

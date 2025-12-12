@@ -29,7 +29,7 @@ class PostDetailScreen extends ConsumerWidget {
 
     return productPost.when(
         data: (data) => _PostDetail(
-              data.simpleProductPost,
+              simpleProductPost ?? data.simpleProductPost,
               productPost: data,
             ),
         error: (error, trace) => "에러 발생".text.make(),
@@ -163,20 +163,21 @@ class _ImagePager extends StatelessWidget {
                     ))
                 .toList(),
           ),
-          Align(
-            alignment: Alignment.bottomCenter,
-            child: SmoothPageIndicator(
-              controller: pageController,
-              count: simpleProductPost.product.images.length,
-              effect: JumpingDotEffect(
-                  verticalOffset: 10,
-                  dotColor: Colors.white54,
-                  activeDotColor: Colors.black45),
-              onDotClicked: (index) {
-                //
-              },
+          if (simpleProductPost.product.images.length > 1)
+            Align(
+              alignment: Alignment.bottomCenter,
+              child: SmoothPageIndicator(
+                controller: pageController,
+                count: simpleProductPost.product.images.length,
+                effect: JumpingDotEffect(
+                    verticalOffset: 10,
+                    dotColor: Colors.white54,
+                    activeDotColor: Colors.black45),
+                onDotClicked: (index) {
+                  //
+                },
+              ),
             ),
-          ),
         ],
       ),
     );
