@@ -1,3 +1,6 @@
+import 'dart:io';
+import 'dart:math';
+
 import 'package:fast_app_base/common/common.dart';
 import 'package:fast_app_base/common/util/app_keyboard_util.dart';
 import 'package:fast_app_base/common/widget/round_button_theme.dart';
@@ -10,8 +13,13 @@ import 'package:fast_app_base/entity/user/vo_address.dart';
 import 'package:fast_app_base/screen/main/tab/home/provider/post_provider.dart';
 import 'package:fast_app_base/screen/post_detail/s_post_detail.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:velocity_x/velocity_x.dart';
+
+import '../dialog/d_message.dart';
+import 'd_select_image_source.dart';
 
 class WriteScreen extends ConsumerStatefulWidget {
   const WriteScreen({super.key});
@@ -20,9 +28,9 @@ class WriteScreen extends ConsumerStatefulWidget {
   ConsumerState<WriteScreen> createState() => _WriteScreenState();
 }
 
-// KeyboardDetector : 강사가 만든 것
-class _WriteScreenState extends ConsumerState<WriteScreen> with KeyboardDetector {
-  final List<String> imageList = [picSum(442)];
+class _WriteScreenState extends ConsumerState<WriteScreen>
+    with KeyboardDetector {
+  final List<String> imageList = [];
 
   final titleController = TextEditingController();
   final priceController = TextEditingController();
@@ -33,21 +41,13 @@ class _WriteScreenState extends ConsumerState<WriteScreen> with KeyboardDetector
   @override
   void initState() {
     titleController.addListener(() {
-      setState(() {
-        //
-      });
+      setState(() {});
     });
-
     priceController.addListener(() {
-      setState(() {
-        //
-      });
+      setState(() {});
     });
-
     descriptionController.addListener(() {
-      setState(() {
-        //
-      });
+      setState(() {});
     });
     super.initState();
   }
@@ -56,41 +56,67 @@ class _WriteScreenState extends ConsumerState<WriteScreen> with KeyboardDetector
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: "내 물건 팔기".text.make(),
-        actions: [
-          Tap(
-            onTap: () {},
-            child: "임시저장".text.make().p(15),
-          )
-        ],
+        title: '내 물건 팔기'.text.bold.make(),
+        actions: [Tap(onTap: () {}, child: '임시저장'.text.make().p(15))],
       ),
-      body: SingleChildScrollView(
-        padding: EdgeInsets.only(bottom: 150),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            _ImageSelectWidget(
-              imageList,
-              onTap: () {
-                //
-              },
-            ),
-            _TitleEditor(titleController),
-            height30,
-            _PriceEditor(priceController),
-            height30,
-            _DescEditor(descriptionController),
-          ],
-        ).pSymmetric(h: 15),
+      body: Tap(
+        onTap: () {
+          AppKeyboardUtil.hide(context);
+        },
+        child: SingleChildScrollView(
+          padding: const EdgeInsets.only(bottom: 150),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              _ImageSelectWidget(
+                imageList,
+                onTapDeleteImage: (imagePath) {
+                  setState(() {
+                    imageList.remove(imagePath);
+                  });
+                },
+                onTap: () async {
+                  final selectedSource = await SelectImageSourceDialog().show();
+
+                  if (selectedSource == null) {
+                    return;
+                  }
+                  try {
+                    final file =
+                        await ImagePicker().pickImage(source: selectedSource);
+                    if (file == null) {
+                      return;
+                    }
+                    setState(() {
+                      imageList.add(file.path);
+                    });
+                  } on PlatformException catch (e) {
+                    switch (e.code) {
+                      case 'invalid_image':
+                        MessageDialog('지원하지 않는 이미지 형식입니다.').show();
+                    }
+                  } catch (e) {
+                    //사진 권한이 필요해요 -> 앱 설정으로
+                    print(e);
+                  }
+                },
+              ),
+              _TitleEditor(titleController),
+              height30,
+              _PriceEditor(priceController),
+              height30,
+              _DescEditor(descriptionController),
+            ],
+          ).pSymmetric(h: 15),
+        ),
       ),
-      // isKeyboardOn : 강사가 만든 것
       bottomSheet: isKeyboardOn
           ? null
           : RoundButton(
-              text: isLoading ? "저장중" : "작성 완료",
+              text: isLoading ? '저장중' : '작성 완료',
               isFullWidth: true,
-              isEnabled: isValid,
               borderRadius: 6,
+              isEnabled: isValid,
               rightWidget: isLoading
                   ? const SizedBox(
                       width: 15,
@@ -102,31 +128,34 @@ class _WriteScreenState extends ConsumerState<WriteScreen> with KeyboardDetector
                 final title = titleController.text;
                 final price = int.parse(priceController.text);
                 final desc = descriptionController.text;
-
                 setState(() {
                   isLoading = true;
                 });
-
                 final list = ref.read(postProvider);
-                final simpleProductPost =  SimpleProductPost(
-                  6,
-                  user3,
-                  Product(
-                      user3, title, price, ProductStatus.normal, imageList),
-                  title,
-                  Address("ㅇㅇ시 ㅇㅇ구 ㅇㅇ동", "ㅇㅇㅇㅇㅇ"),
-                  0,
-                  0,
-                  DateTime.now(),
-                );
+                final simpleProductPost = SimpleProductPost(
+                    6,
+                    user3,
+                    Product(
+                      user3,
+                      title,
+                      price,
+                      ProductStatus.normal,
+                      imageList,
+                    ),
+                    title,
+                    Address('서울시 다트구 플러터동', '플러터동'),
+                    0,
+                    0,
+                    DateTime.now());
                 ref.read(postProvider.notifier).state = List.of(list)
-                // add()는 리턴값이 없어서 List를 그대로 넘겨주려면 .. 사용
                   ..add(simpleProductPost);
                 Nav.pop(context);
-                Nav.push(PostDetailScreen(
+                Nav.push(
+                  PostDetailScreen(
                     simpleProductPost.id,
-                  simpleProductPost: simpleProductPost,
-                ));
+                    simpleProductPost: simpleProductPost,
+                  ),
+                );
               },
             ),
     );
@@ -141,8 +170,14 @@ class _WriteScreenState extends ConsumerState<WriteScreen> with KeyboardDetector
 class _ImageSelectWidget extends StatelessWidget {
   final List<String> imageList;
   final VoidCallback onTap;
+  final void Function(String path) onTapDeleteImage;
 
-  const _ImageSelectWidget(this.imageList, {required this.onTap, super.key});
+  const _ImageSelectWidget(
+    this.imageList, {
+    required this.onTap,
+    required this.onTapDeleteImage,
+    super.key,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -152,29 +187,73 @@ class _ImageSelectWidget extends StatelessWidget {
         scrollDirection: Axis.horizontal,
         child: Row(
           children: [
-            SizedBox(
-              width: 80,
-              height: 80,
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  const Icon(Icons.camera_alt),
-                  RichText(
-                    text: TextSpan(children: [
-                      TextSpan(
-                        text: imageList.length.toString(),
-                        style: const TextStyle(
-                          color: Colors.orange,
+            SelectImageButton(onTap: onTap, imageList: imageList)
+                .pOnly(top: 10, right: 8),
+            ...imageList.map((imagePath) => Stack(
+                  children: [
+                    SizedBox(
+                      width: 80,
+                      height: 80,
+                      child: ClipRRect(
+                          borderRadius: BorderRadius.circular(15),
+                          child: Image.file(
+                            File(imagePath),
+                            fit: BoxFit.fill,
+                          ).box.rounded.border(color: Colors.grey).make()),
+                    ).pOnly(left: 4, right: 10, top: 10),
+                    Positioned.fill(
+                      child: Align(
+                        alignment: Alignment.topRight,
+                        child: Tap(
+                          onTap: () {
+                            onTapDeleteImage(imagePath);
+                          },
+                          child: Transform.rotate(
+                            angle: pi / 4,
+                            child: Icon(Icons.add_circle),
+                          ).pOnly(left: 30, bottom: 30),
                         ),
                       ),
-                      const TextSpan(text: "/10"),
-                    ]),
-                  ),
-                ],
-              ).box.rounded.border(color: Colors.grey).make(),
-            )
+                    )
+                  ],
+                ))
           ],
         ),
+      ),
+    );
+  }
+}
+
+class SelectImageButton extends StatelessWidget {
+  const SelectImageButton({
+    super.key,
+    required this.onTap,
+    required this.imageList,
+  });
+
+  final VoidCallback onTap;
+  final List<String> imageList;
+
+  @override
+  Widget build(BuildContext context) {
+    return Tap(
+      onTap: onTap,
+      child: SizedBox(
+        width: 80,
+        height: 80,
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Icon(Icons.camera_alt),
+            RichText(
+                text: TextSpan(children: [
+              TextSpan(
+                  text: imageList.length.toString(),
+                  style: TextStyle(color: Colors.orange)),
+              TextSpan(text: '/10')
+            ])),
+          ],
+        ).box.rounded.border(color: Colors.grey).make(),
       ),
     );
   }
@@ -194,19 +273,16 @@ class _TitleEditor extends StatelessWidget {
         height5,
         TextField(
           controller: controller,
-          decoration: const InputDecoration(
-            hintText: '제목',
-            focusedBorder: OutlineInputBorder(
-              borderSide: BorderSide(
+          decoration: InputDecoration(
+              hintText: '제목',
+              focusedBorder: OutlineInputBorder(
+                  borderSide: BorderSide(
                 color: Colors.orange,
-              ),
-            ),
-            border: OutlineInputBorder(
-              borderSide: BorderSide(
+              )),
+              border: OutlineInputBorder(
+                  borderSide: BorderSide(
                 color: Colors.grey,
-              ),
-            ),
-          ),
+              ))),
         ),
       ],
     );
@@ -268,19 +344,16 @@ class _PriceEditorState extends State<_PriceEditor> {
           controller: widget.controller,
           keyboardType: TextInputType.number,
           enabled: !isDonateMode,
-          decoration: const InputDecoration(
-            hintText: '￦ 가격을 입력해주세요.',
-            focusedBorder: OutlineInputBorder(
-              borderSide: BorderSide(
+          decoration: InputDecoration(
+              hintText: '￦ 가격을 입력해주세요.',
+              focusedBorder: OutlineInputBorder(
+                  borderSide: BorderSide(
                 color: Colors.orange,
-              ),
-            ),
-            border: OutlineInputBorder(
-              borderSide: BorderSide(
+              )),
+              border: OutlineInputBorder(
+                  borderSide: BorderSide(
                 color: Colors.grey,
-              ),
-            ),
-          ),
+              ))),
         ),
       ],
     );
@@ -302,19 +375,16 @@ class _DescEditor extends StatelessWidget {
         TextField(
           controller: controller,
           maxLines: 7,
-          decoration: const InputDecoration(
-            hintText: '에 올릴 게시글 내용을 작성해주세요.',
-            focusedBorder: OutlineInputBorder(
-              borderSide: BorderSide(
+          decoration: InputDecoration(
+              hintText: '에 올릴 게시글 내용을 작성해주세요.',
+              focusedBorder: OutlineInputBorder(
+                  borderSide: BorderSide(
                 color: Colors.orange,
-              ),
-            ),
-            border: OutlineInputBorder(
-              borderSide: BorderSide(
+              )),
+              border: OutlineInputBorder(
+                  borderSide: BorderSide(
                 color: Colors.grey,
-              ),
-            ),
-          ),
+              ))),
         ),
       ],
     );

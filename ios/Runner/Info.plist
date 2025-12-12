@@ -49,5 +49,11 @@
 		<true/>
 		<key>UIStatusBarHidden</key>
 		<false/>
+        <!-- Camera permission -->
+        <key>NSCameraUsageDescription</key>
+        <string>상품 사진을 촬영하기 위해 카메라 접근 권한이 필요합니다.</string>
+        <!-- Photo library permission -->
+        <key>NSPhotoLibraryUsageDescription</key>
+        <string>상품 사진을 선택하기 위해 사진 라이브러리 접근 권한이 필요합니다.</string>
 	</dict>
 </plist>
